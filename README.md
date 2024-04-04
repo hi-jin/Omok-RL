@@ -9,6 +9,7 @@ This project is built on OpenAI Gym and Stable-Baselines3, providing a framework
 
 ## Overview
 Omok, also known as Gomoku, is a strategy board game traditionally played with Go pieces (black and white stones) on a Go board. The objective is to be the first to place five of one's own pieces in a row, either horizontally, vertically, or diagonally.
+
 In this project, I have developed a training environment where two AI agents compete against each other in the game of Omok. The agents are trained using reinforcement learning techniques provided by Stable-Baselines3, integrated within an OpenAI Gym environment. To accelerate learning, one agent is periodically cloned from the other, ensuring that both agents evolve competitive strategies against increasingly skilled opponents.
 
 ## Features
