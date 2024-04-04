@@ -7,6 +7,7 @@
 
 ## Description
 Training Omok AI with OpenAI Gym and Stable-Baselines3
+
 This project is built on OpenAI Gym and Stable-Baselines3, providing a framework for two agents to compete and learn from each other, enhancing their strategies over time.
 
 ## Overview
