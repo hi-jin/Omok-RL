@@ -1,4 +1,6 @@
 import stable_baselines3 as sb3
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.vec_env import DummyVecEnv, VecVideoRecorder
 import wandb
 from wandb.integration.sb3 import WandbCallback
 import numpy as np
@@ -16,13 +18,22 @@ except ImportError:
 from omok.omok import Omok, StateAfterPutStone, Stone
 
 
-wandb.init(
+run = wandb.init(
     project="omok",
+    sync_tensorboard=True,
+    monitor_gym=True,
+    save_code=True,
 )
 
 
 omok = Omok()
-env = OmokEnv(omok, Stone.BLACK)
+env_without_wrapper = OmokEnv(omok, Stone.BLACK, render_mode="rgb_array")
+env = VecVideoRecorder(
+    DummyVecEnv([lambda: Monitor(env_without_wrapper)]),  # type: ignore
+    f"videos/{run.id}",  # type: ignore
+    record_video_trigger=lambda x: x % 10000 == 0,
+    video_length=300,
+)
 black = sb3.PPO(
     "CnnPolicy",
     env,
@@ -34,10 +45,10 @@ black = sb3.PPO(
         ),
     ),
 )
-env.main_agent = black
+env_without_wrapper.main_agent = black
 
 black.save("black")
-env.copied_agent = sb3.PPO.load("black")
+env_without_wrapper.copied_agent = sb3.PPO.load("black")
 
 
 from stable_baselines3.common.callbacks import BaseCallback
@@ -49,18 +60,19 @@ class CustomCallback(BaseCallback):
         self.check_freq = check_freq
 
     def _on_step(self) -> bool:
-        global env, black
+        global env_without_wrapper, black
         # 매 check_freq 타임스텝마다 실행될 로직
         if self.n_calls % self.check_freq == 0:
             black.save("black")
-            env.copied_agent = sb3.PPO.load("black")
+            env_without_wrapper.copied_agent = sb3.PPO.load("black")
         return True
 
 
 black.learn(
     500000,
-    callback=[
-        WandbCallback(),
-        CustomCallback(check_freq=10000),
-    ],
+    callback=WandbCallback(
+        model_save_path="./models/",
+        model_save_freq=10000,
+        verbose=2,
+    ),
 )

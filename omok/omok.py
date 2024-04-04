@@ -3,6 +3,9 @@ from typing import Tuple
 from enum import Enum, auto
 
 
+SCREEN_ON = False
+
+
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 EMPTY = (128, 128, 128)
@@ -58,7 +61,7 @@ class Omok:
 
         return StateAfterPutStone.CONTINUE
 
-    def render_current_board(self):
+    def render_current_board(self, render_mode: str = "human"):
         self._pygame_init_if_not_initialized()
         self.screen.fill(EMPTY)
 
@@ -101,7 +104,11 @@ class Omok:
                         self.cell_size // 2,
                     )
 
-        pygame.display.flip()
+        # 화면 업데이트
+        if render_mode == "human":
+            pygame.display.flip()
+        elif render_mode == "rgb_array":
+            return pygame.surfarray.array3d(self.screen)
 
     def reset(self):
         self.board = [[Stone.EMPTY for _ in range(self.board_size[1])] for _ in range(self.board_size[0])]
@@ -172,7 +179,8 @@ class Omok:
             self.screen_size = 600
             self.padding_size = 50
             self.screen = pygame.display.set_mode(
-                (self.screen_size + self.padding_size * 2, self.screen_size + self.padding_size * 2)
+                (self.screen_size + self.padding_size * 2, self.screen_size + self.padding_size * 2),
+                flags=pygame.HIDDEN if not SCREEN_ON else 0,
             )
             self.cell_size = self.screen_size // self.board_size[0]
 

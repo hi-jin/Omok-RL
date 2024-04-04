@@ -8,10 +8,12 @@ class OmokEnv(gym.Env):
         self,
         omok: Omok,
         agent_stone: Stone = Stone.BLACK,
+        render_mode: str = "human",
     ):
         super().__init__()
         self.main_agent = None
         self.copied_agent = None
+        self.render_mode = render_mode
 
         self.omok = omok
         self.agent_stone = agent_stone
@@ -30,15 +32,21 @@ class OmokEnv(gym.Env):
         else:
             return np.array(self.omok.opposite_observation())
 
+    def render(self):
+        if self.render_mode == "human":
+            self.omok.render_current_board()
+        else:
+            return self.omok.render_current_board(render_mode=self.render_mode)  # type: ignore
+
     def reset(self, seed=None):
         self.omok.reset()
-        self.omok.render_current_board()
+        self.render()
         return self.observation(), {}
 
     def step(self, action):
         x, y = action
         state_after_put_stone = self.omok.put_stone(self.agent_stone, x, y)
-        self.omok.render_current_board()
+        self.render()
         match state_after_put_stone:
             case StateAfterPutStone.BLACK_WIN:
                 return (
@@ -69,7 +77,7 @@ class OmokEnv(gym.Env):
                         x,
                         y,
                     )
-                    self.omok.render_current_board()
+                    self.render()
 
                     match state_after_put_stone:
                         case StateAfterPutStone.BLACK_WIN:

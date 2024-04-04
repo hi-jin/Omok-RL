@@ -1,3 +1,5 @@
 *.zip
 wandb
 **/__pycache__
+nohup.*
+videos/
