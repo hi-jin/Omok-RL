@@ -51,7 +51,7 @@ class OmokEnv(gym.Env):
             case StateAfterPutStone.BLACK_WIN:
                 return (
                     self.observation(),
-                    1 if self.agent_stone == Stone.BLACK else -1,
+                    10 if self.agent_stone == Stone.BLACK else -10,
                     True,
                     False,
                     {},
@@ -59,7 +59,7 @@ class OmokEnv(gym.Env):
             case StateAfterPutStone.WHITE_WIN:
                 return (
                     self.observation(),
-                    1 if self.agent_stone == Stone.WHITE else -1,
+                    10 if self.agent_stone == Stone.WHITE else -10,
                     True,
                     False,
                     {},
@@ -83,7 +83,7 @@ class OmokEnv(gym.Env):
                         case StateAfterPutStone.BLACK_WIN:
                             return (
                                 self.observation(),
-                                1 if self.agent_stone == Stone.BLACK else -1,
+                                10 if self.agent_stone == Stone.BLACK else -10,
                                 True,
                                 False,
                                 {},
@@ -91,7 +91,7 @@ class OmokEnv(gym.Env):
                         case StateAfterPutStone.WHITE_WIN:
                             return (
                                 self.observation(),
-                                1 if self.agent_stone == Stone.WHITE else -1,
+                                10 if self.agent_stone == Stone.WHITE else -10,
                                 True,
                                 False,
                                 {},
