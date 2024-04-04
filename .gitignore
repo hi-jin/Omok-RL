@@ -1,0 +1,3 @@
+*.zip
+wandb
+**/__pycache__
