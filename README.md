@@ -1,3 +1,5 @@
+<img width="121" alt="image" src="https://github.com/hi-jin/Omok-RL/assets/51053567/f981ab82-cafa-4902-8d9c-b13d43d7c9e5">
+
 # Omok (Gomoku) RL agent
 
 >[!WARNING]
