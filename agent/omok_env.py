@@ -117,7 +117,7 @@ class OmokEnv(gym.Env):
             case StateAfterPutStone.FAIL_INVALID_POSITION:
                 return (
                     self.observation(),
-                    0,
+                    -1,
                     False,
                     False,
                     {},
@@ -125,7 +125,7 @@ class OmokEnv(gym.Env):
             case StateAfterPutStone.FAIL_INVALID_TURN:
                 return (
                     self.observation(),
-                    -100,
+                    -100,  # never reach here (maybe....)
                     False,
                     False,
                     {},
