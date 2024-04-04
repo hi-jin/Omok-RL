@@ -44,11 +44,12 @@ black = sb3.PPO(
             features_dim=128,
         ),
     ),
+    tensorboard_log=f"runs/{run.id}",  # type: ignore
 )
-env_without_wrapper.main_agent = black
+env_without_wrapper.main_agent = black  # type: ignore
 
 black.save("black")
-env_without_wrapper.copied_agent = sb3.PPO.load("black")
+env_without_wrapper.copied_agent = sb3.PPO.load("black")  # type: ignore
 
 
 from stable_baselines3.common.callbacks import BaseCallback
@@ -64,15 +65,18 @@ class CustomCallback(BaseCallback):
         # 매 check_freq 타임스텝마다 실행될 로직
         if self.n_calls % self.check_freq == 0:
             black.save("black")
-            env_without_wrapper.copied_agent = sb3.PPO.load("black")
+            env_without_wrapper.copied_agent = sb3.PPO.load("black")  # type: ignore
         return True
 
 
 black.learn(
     500000,
-    callback=WandbCallback(
-        model_save_path="./models/",
-        model_save_freq=10000,
-        verbose=2,
-    ),
+    callback=[
+        WandbCallback(
+            model_save_path="./models/",
+            model_save_freq=10000,
+            verbose=2,
+        ),
+        CustomCallback(check_freq=10000),
+    ],
 )
