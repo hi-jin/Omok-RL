@@ -17,22 +17,23 @@ class OmokEnv(gym.Env):
         self.agent_stone = agent_stone
 
         self.action_space = gym.spaces.MultiDiscrete([15, 15])
-        self.observation_space = gym.spaces.Dict(
-            {
-                "agent_stone": gym.spaces.Discrete(2),
-                "board": gym.spaces.Box(
-                    low=0,
-                    high=2,
-                    shape=(15, 15),
-                    dtype=np.uint8,
-                ),
-            }
+        self.observation_space = gym.spaces.Box(
+            low=0,
+            high=2,
+            shape=(15, 15),
+            dtype=np.uint8,
         )
+
+    def observation(self):
+        if self.agent_stone == Stone.BLACK:
+            return np.array(self.omok.observation())
+        else:
+            return np.array(self.omok.opposite_observation())
 
     def reset(self, seed=None):
         self.omok.reset()
         self.omok.render_current_board()
-        return {"agent_stone": 0 if self.agent_stone == Stone.BLACK else 1, "board": self.omok.observation()}, {}
+        return self.observation(), {}
 
     def step(self, action):
         x, y = action
@@ -59,7 +60,9 @@ class OmokEnv(gym.Env):
                 # opponent's turn
                 # TODO : MinMAX 알고리즘
                 while True:
-                    action, _ = self.copied_agent.predict({"agent_stone": 1 if self.agent_stone == Stone.BLACK else 0, "board": self.omok.observation()})
+                    action, _ = self.copied_agent.predict(
+                        self.observation(),
+                    )
                     x, y = action
                     state_after_put_stone = self.omok.put_stone(
                         Stone.WHITE if self.agent_stone == Stone.BLACK else Stone.BLACK,
@@ -119,9 +122,3 @@ class OmokEnv(gym.Env):
                     False,
                     {},
                 )
-
-    def observation(self):
-        return {"agent_stone": self._agent_stone_value(), "board": self.omok.observation()}
-
-    def _agent_stone_value(self):
-        return 0 if self.agent_stone == Stone.BLACK else 1

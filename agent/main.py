@@ -7,6 +7,12 @@ try:
     from omok_env import OmokEnv
 except ImportError:
     from agent.omok_env import OmokEnv
+
+try:
+    from omok_feature_extractor import OmokFeatureExtractor
+except ImportError:
+    from agent.omok_feature_extractor import OmokFeatureExtractor
+
 from omok.omok import Omok, StateAfterPutStone, Stone
 
 
@@ -17,7 +23,17 @@ wandb.init(
 
 omok = Omok()
 env = OmokEnv(omok, Stone.BLACK)
-black = sb3.PPO("MultiInputPolicy", env, verbose=1)
+black = sb3.PPO(
+    "CnnPolicy",
+    env,
+    verbose=1,
+    policy_kwargs=dict(
+        features_extractor_class=OmokFeatureExtractor,
+        features_extractor_kwargs=dict(
+            features_dim=128,
+        ),
+    ),
+)
 env.main_agent = black
 
 black.save("black")

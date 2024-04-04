@@ -116,6 +116,25 @@ class Omok:
             result.append(line)
         return result
 
+    def opposite_observation(self):
+        """Return the board with the opposite stone color.
+
+        Agent would be trained as black stone.
+        So, when the agent need to do a role of white stone, it should use this method.
+        """
+        result = []
+        for row in self.board:
+            line = []
+            for cell in row:
+                if cell == Stone.BLACK:
+                    line.append(Stone.WHITE.value)
+                elif cell == Stone.WHITE:
+                    line.append(Stone.BLACK.value)
+                else:
+                    line.append(Stone.EMPTY.value)
+            result.append(line)
+        return result
+
     def _is_board_full(self):
         return all(cell != Stone.EMPTY for row in self.board for cell in row)
 
