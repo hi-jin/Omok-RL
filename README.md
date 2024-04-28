@@ -34,6 +34,7 @@ https://github.com/hi-jin/omok-RL/assets/51053567/5344ed03-a841-454a-ad88-c5897a
 - [x] Implement the Omok Game
 - [x] Wrap the Omok Game in a Gym Environment
 - [x] Implement Learning Agents that compete
+- [ ] Masking unauthorized actions
 - [ ] Enhance performance with algorithm adjustments
 - [ ] Implement various Omok rules
 - [ ] Develop an API for the game

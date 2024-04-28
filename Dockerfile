@@ -14,10 +14,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Pytorch essentials
-RUN pip3 install torch torchmetrics lightning numpy pandas matplotlib transformers datasets ipykernel einops
+RUN pip3 install torch torchmetrics lightning numpy pandas matplotlib transformers datasets ipykernel einops wandb
 
 # for RL
-RUN pip3 install gym stable-baselines3
+RUN pip3 install gym stable-baselines3 sb3-contrib pettingzoo
 
 # 컨테이너 시작 시 실행될 명령
 CMD ["bash"]
