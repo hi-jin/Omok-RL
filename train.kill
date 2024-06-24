@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Kill processes started by train.sh
+kill -9 $(cat *.pid) 2>/dev/null
+rm *.pid 2>/dev/null

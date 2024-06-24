@@ -7,11 +7,11 @@ name = "pypi"
 gymnasium = "*"
 stable-baselines3 = "*"
 torch = "*"
-numpy = "*"
+numpy = "==1.23.5"
 wandb = "*"
 tensorboard = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.12"
+python_version = "3.10"

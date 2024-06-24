@@ -4,3 +4,5 @@ wandb
 nohup.*
 videos/
 runs/
+models/
+*.log
