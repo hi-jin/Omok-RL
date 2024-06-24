@@ -1,0 +1,3 @@
+[submodule "omok-game"]
+	path = omok-game
+	url = https://github.com/hi-jin/Omok-Game
