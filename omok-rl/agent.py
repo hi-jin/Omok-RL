@@ -41,10 +41,10 @@ if __name__ == "__main__":
         ent_coef=0.01,
     )
     agent.learn(
-        total_timesteps=100000,
+        total_timesteps=1050000,
         callback=WandbCallback(
             model_save_path=f"./models/{run.id}",
-            model_save_freq=10000,
+            model_save_freq=100000,
             verbose=2,
         ),
     )
