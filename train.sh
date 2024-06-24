@@ -6,8 +6,8 @@ nohup pipenv run python main.py --port=$PORT --screen-mode=$SCREEN_MODE > ../gam
 cd ..
 
 cd omok-rl 
-nohup pipenv run python agent.py --server-port=$PORT --who=black > ../agent-black.log 2>&1 & echo $! > ../agent-black.pid
-nohup pipenv run python agent.py --server-port=$PORT --who=white > ../agent-white.log 2>&1 & echo $! > ../agent-white.pid  
+nohup pipenv run python agent.py --server-port=$PORT --who=black --mode=train > ../agent-black.log 2>&1 & echo $! > ../agent-black.pid
+nohup pipenv run python agent.py --server-port=$PORT --who=white --mode=train > ../agent-white.log 2>&1 & echo $! > ../agent-white.pid  
 cd ..
 
 

@@ -6,21 +6,7 @@ import wandb
 from wandb.integration.sb3 import WandbCallback
 
 
-if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument(
-        "--server-port",
-        type=int,
-        required=True,
-    )
-    parser.add_argument(
-        "--who",
-        type=str,
-        required=True,
-    )
-
-    args = parser.parse_args()
-
+def train(args):
     run = wandb.init(
         project="omok-rl",
         name=f"agent_{args.who}",
@@ -49,3 +35,51 @@ if __name__ == "__main__":
         ),
     )
     run.finish()
+
+
+def test(args):
+    env = OmokEnv(
+        server_port=args.server_port,
+        who=args.who,
+    )
+
+    model = sb3.PPO.load(
+        args.model_path,
+        env=env,
+    )
+
+    obs, _ = env.reset()
+    done = False
+    while not done:
+        action, _ = model.predict(obs)
+        obs, reward, done, _, _ = env.step(action)
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument(
+        "--server-port",
+        type=int,
+        required=True,
+    )
+    parser.add_argument(
+        "--who",  # black / white
+        type=str,
+        required=True,
+    )
+    parser.add_argument(
+        "--mode",  # train / test
+        type=str,
+        required=True,
+    )
+    parser.add_argument(
+        "--model-path",  # for test
+        type=str,
+    )
+
+    args = parser.parse_args()
+
+    if args.mode == "train":
+        train(args)
+    else:
+        test(args)
